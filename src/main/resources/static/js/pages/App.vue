@@ -1,6 +1,6 @@
 <template>
 
-    <div>
+    <div class="qwe">
         <div v-if="!profile">Необходимо авторизоваться через <a href="/login">Google</a></div>
         <div v-else>
             <div>{{ profile.name }}&nbsp;<a href="/logout">Выйти</a></div>
@@ -14,6 +14,7 @@
 import MessagesList from "components/messages/MessageList.vue";
 import {addHandler} from "util/ws";
 import {getIndex} from "util/collections";
+
 
 export default {
     components: {
@@ -40,5 +41,7 @@ export default {
 </script>
 
 <style>
-
+.qwe{
+    color: maroon;
+}
 </style>
