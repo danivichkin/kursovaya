@@ -36,7 +36,17 @@ module.exports = {
                 use: [
                     'vue-style-loader',
                     'style-loader',
-                    'css-loader'
+                    'css-loader',
+                    {
+                        loader: 'sass-loader',
+                        // Requires sass-loader@^8.0.0
+                        options: {
+                            implementation: require('sass'),
+                            sassOptions: {
+                                fiber: require('fibers'),
+                            },
+                        },
+                    },
                 ]
             }
         ]
@@ -45,6 +55,10 @@ module.exports = {
         new VueLoaderPlugin()
     ],
     resolve: {
+        alias: {
+            plugins: path.resolve(__dirname, 'src/plugins/vuetify.js')
+        },
+        extensions: ['.js', 'jsx', '.css'],
         modules: [
             path.join(__dirname, 'src', 'main', 'resources', 'static', 'js'),
             path.join(__dirname, 'node_modules'),

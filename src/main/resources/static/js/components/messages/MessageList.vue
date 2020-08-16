@@ -1,7 +1,7 @@
 <template>
-    <div style="position: relative; width: 300px;">
+    <div>
         <message-form :messages="messages" :messageAttr="message"/>
-        <message-row v-for="message in messages"
+        <message-row v-for="message in sortedMessages"
                      :key="message.id"
                      :message="message"
                      :editMessage="editMessage"
@@ -23,6 +23,11 @@ export default {
     data() {
         return {
             message: null
+        }
+    },
+    computed: {
+        sortedMessages(){
+            return this.messages.sort((a, b) => (a.id - b.id))
         }
     },
     methods: {
