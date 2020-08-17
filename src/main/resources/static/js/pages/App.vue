@@ -1,13 +1,23 @@
 <template>
+    <v-app>
+        <v-app-bar app>
+            <v-toolbar-title>HobbyFinder</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <span v-if="profile">{{ profile.name }}</span>
+            <v-btn v-if="profile" icon href="/logout">
+                <v-icon>exit_to_app</v-icon>
+            </v-btn>
+        </v-app-bar>
 
-    <div class="qwe">
-        <div v-if="!profile">Необходимо авторизоваться через <a href="/login">Google</a></div>
-        <div v-else>
-            <div>{{ profile.name }}&nbsp;<a href="/logout">Выйти</a></div>
-            <messages-list :messages="messages"/>
-        </div>
-    </div>
-
+        <v-main>
+            <v-container v-if="!profile">
+                Необходимо авторизоваться через<a href="/login">Google</a>
+            </v-container>
+            <v-container v-if="profile">
+                <messages-list :messages="messages"/>
+            </v-container>
+        </v-main>
+    </v-app>
 </template>
 
 <script>
@@ -29,9 +39,9 @@ export default {
     created() {
         addHandler(data => {
             let index = getIndex(this.messages, data.id)
-            if (index > -1){
+            if (index > -1) {
                 this.messages.splice(index, 1, data)
-        } else {
+            } else {
                 this.messages.push(data)
             }
         })
@@ -41,7 +51,4 @@ export default {
 </script>
 
 <style>
-.qwe{
-    color: maroon;
-}
 </style>
