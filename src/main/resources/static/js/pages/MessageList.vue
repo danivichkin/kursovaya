@@ -1,24 +1,23 @@
 <template>
-    <v-row>
-        <v-col>
-            <message-form :messageAttr="message"/>
-
-            <v-col cols="3" sm="4">
-            <message-row v-for="message in sortedMessages"
-                     :key="message.id"
-                     :message="message"
-                     :editMessage="editMessage" />
+    <v-container>
+        <v-row>
+            <v-col>
+                <message-form :messageAttr="message"/>
+                <v-col cols="3" sm="4">
+                    <message-row v-for="message in sortedMessages"
+                                 :key="message.id"
+                                 :message="message"
+                                 :editMessage="editMessage"/>
+                </v-col>
             </v-col>
-
-        </v-col>
-    </v-row>
-
+        </v-row>
+    </v-container>
 </template>
 
 <script>
 import MessageRow from 'components/messages/MessageRow.vue'
 import MessageForm from 'components/messages/MessageForm.vue'
-import { mapGetters } from 'vuex';
+import {mapGetters} from 'vuex';
 
 export default {
     components: {
@@ -34,7 +33,7 @@ export default {
     methods: {
         editMessage(message) {
             this.message = message
-        },
+        }
     }
 }
 </script>
