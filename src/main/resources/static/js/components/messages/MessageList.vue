@@ -1,15 +1,13 @@
 <template>
     <v-row>
         <v-col>
-            <message-form :messages="messages" :messageAttr="message"/>
+            <message-form :messageAttr="message"/>
 
             <v-col cols="3" sm="4">
             <message-row v-for="message in sortedMessages"
                      :key="message.id"
                      :message="message"
-                     :editMessage="editMessage"
-                     :deleteMessage="deleteMessage"
-                     :messages="messages"/>
+                     :editMessage="editMessage" />
             </v-col>
 
         </v-col>
@@ -20,10 +18,9 @@
 <script>
 import MessageRow from 'components/messages/MessageRow.vue'
 import MessageForm from 'components/messages/MessageForm.vue'
-import messagesApi from "../../api/messages";
+import { mapGetters } from 'vuex';
 
 export default {
-    props: ['messages'],
     components: {
         MessageRow,
         MessageForm
@@ -33,22 +30,11 @@ export default {
             message: null
         }
     },
-    computed: {
-        sortedMessages() {
-            return this.messages.sort((a, b) => -(a.id - b.id))
-        }
-    },
+    computed: mapGetters(['sortedMessages']),
     methods: {
         editMessage(message) {
             this.message = message
         },
-        deleteMessage(message) {
-            messagesApi.remove(message.id).then(result => {
-                if (result.ok) {
-                    this.messages.splice(this.messages.indexOf(message), 1)
-                }
-            })
-        }
     }
 }
 </script>
