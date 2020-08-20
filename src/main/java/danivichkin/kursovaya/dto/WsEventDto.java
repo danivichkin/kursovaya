@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-@JsonView(Views.IdName.class)
+@JsonView(Views.Id.class)
 public class WsEventDto {
 
     private ObjectType objectType;

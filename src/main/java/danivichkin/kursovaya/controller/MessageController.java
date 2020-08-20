@@ -8,6 +8,7 @@ import danivichkin.kursovaya.dto.ObjectType;
 import danivichkin.kursovaya.repo.MessageRepo;
 import danivichkin.kursovaya.util.WsSender;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -15,12 +16,12 @@ import java.util.List;
 import java.util.function.BiConsumer;
 
 @RestController
-@RequestMapping("/message")
+@RequestMapping("message")
 public class MessageController {
-
     private final MessageRepo messageRepo;
     private final BiConsumer<EventType, Message> wsSender;
 
+    @Autowired
     public MessageController(MessageRepo messageRepo, WsSender wsSender) {
         this.messageRepo = messageRepo;
         this.wsSender = wsSender.getSender(ObjectType.MESSAGE, Views.IdName.class);
@@ -33,6 +34,7 @@ public class MessageController {
     }
 
     @GetMapping("{id}")
+    @JsonView(Views.FullMessage.class)
     public Message getOne(@PathVariable("id") Message message) {
         return message;
     }
