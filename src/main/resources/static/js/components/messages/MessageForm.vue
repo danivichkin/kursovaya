@@ -1,7 +1,13 @@
 <template>
 
     <v-layout row>
-        <v-text-field class="px-4" label="Write message" placeholder="Write something" v-model="text">
+        <v-text-field
+            class="px-4"
+            label="Write message"
+            placeholder="Write something"
+            v-model="text"
+            @keyup.enter="save"
+        >
         </v-text-field>
         <v-btn @click="save">
             Save

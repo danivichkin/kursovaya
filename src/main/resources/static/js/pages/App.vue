@@ -32,7 +32,7 @@ import {mapState, mapMutations} from 'vuex'
 import {addHandler} from 'util/ws'
 
 export default {
-    computed: mapState(['profile',]),
+    computed: mapState(['profile']),
     methods: {
         ...mapMutations(['addMessageMutation', 'updateMessageMutation', 'removeMessageMutation']),
         showMessages() {

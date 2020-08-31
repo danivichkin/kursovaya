@@ -2,6 +2,7 @@ package danivichkin.kursovaya.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import danivichkin.kursovaya.domain.Message;
+import danivichkin.kursovaya.domain.User;
 import danivichkin.kursovaya.domain.Views;
 import danivichkin.kursovaya.dto.EventType;
 import danivichkin.kursovaya.dto.ObjectType;
@@ -9,6 +10,7 @@ import danivichkin.kursovaya.repo.MessageRepo;
 import danivichkin.kursovaya.util.WsSender;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -40,8 +42,12 @@ public class MessageController {
     }
 
     @PostMapping
-    public Message create(@RequestBody Message message) {
+    public Message create(
+            @RequestBody Message message,
+            @AuthenticationPrincipal User user
+    ) {
         message.setCreationDate(LocalDateTime.now());
+        message.setAuthor(user);
         Message updatedMessage = messageRepo.save(message);
 
         wsSender.accept(EventType.CREATE, updatedMessage);

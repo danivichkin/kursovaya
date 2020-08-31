@@ -1,6 +1,7 @@
 package danivichkin.kursovaya.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -14,8 +15,11 @@ import java.time.LocalDateTime;
 @Table(name = "usr")
 public class User implements Serializable {
     @Id
+    @JsonView(Views.IdName.class)
     private String id;
+    @JsonView(Views.FullMessage.class)
     private String name;
+    @JsonView(Views.FullMessage.class)
     private String userpic;
     private String email;
     private String gender;
