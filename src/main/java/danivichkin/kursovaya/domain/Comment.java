@@ -7,12 +7,11 @@ import lombok.Data;
 import javax.persistence.*;
 
 
-@Data
-@Table
 @Entity
+@Table
+@Data
 @EqualsAndHashCode(of = { "id" })
 public class Comment {
-
     @Id
     @GeneratedValue
     @JsonView(Views.IdName.class)
@@ -23,10 +22,11 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "message_id")
+    @JsonView(Views.FullComment.class)
     private Message message;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false, updatable = false)
-    @JsonView(Views.FullMessage.class)
+    @JsonView(Views.IdName.class)
     private User author;
 }
