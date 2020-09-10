@@ -1,23 +1,24 @@
 <template>
-    <v-container>
-        <v-layout justify-space-around>
-            <v-flex :xs6="!$vuetify.breakpoint.xsOnly">
-                <div class="title mb-3"> profile</div>
-                <v-layout row justify-space-between>
-                    <v-flex class="px-1">
-                        <v-img :src="profile.userpic"></v-img>
-                    </v-flex>
-                    <v-flex class="px-1">
-                        <v-layout column>
-                            <v-flex>{{ profile.name }}</v-flex>
-                            <v-flex>{{ profile.locale }}</v-flex>
-                            <v-flex>{{ profile.email }}</v-flex>
-                            <v-flex>{{ profile.lastVisit }}</v-flex>
-                        </v-layout>
-                    </v-flex>
-                </v-layout>
-            </v-flex>
-        </v-layout>
+    <v-container class="grey lighten-5">
+        <v-row no-gutters>
+                <v-flex :xs6="!$vuetify.breakpoint.xsOnly">
+                    <div class="title mb-3"> {{ profile.name }}</div>
+                    <v-layout row justify-space-between>
+                        <v-card>
+                            <v-flex class="px-1">
+                                <v-img :src="profile.userpic"></v-img>
+                            </v-flex>
+                        </v-card>
+                        <v-flex class="px-1">
+                            <v-layout column>
+                                <v-flex>{{ profile.locale }}</v-flex>
+                                <v-flex>{{ profile.email }}</v-flex>
+                                <v-flex>{{ profile.lastVisit }}</v-flex>
+                            </v-layout>
+                        </v-flex>
+                    </v-layout>
+                </v-flex>
+        </v-row>
     </v-container>
 
 </template>

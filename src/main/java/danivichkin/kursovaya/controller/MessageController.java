@@ -4,35 +4,36 @@ import com.fasterxml.jackson.annotation.JsonView;
 import danivichkin.kursovaya.domain.Message;
 import danivichkin.kursovaya.domain.User;
 import danivichkin.kursovaya.domain.Views;
-import danivichkin.kursovaya.dto.EventType;
-import danivichkin.kursovaya.dto.ObjectType;
-import danivichkin.kursovaya.repo.MessageRepo;
-import danivichkin.kursovaya.util.WsSender;
-import org.springframework.beans.BeanUtils;
+import danivichkin.kursovaya.dto.MessagePageDto;
+import danivichkin.kursovaya.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.function.BiConsumer;
+import java.io.IOException;
 
 @RestController
 @RequestMapping("message")
 public class MessageController {
-    private final MessageRepo messageRepo;
-    private final BiConsumer<EventType, Message> wsSender;
+
+    public final static int MESSAGE_PER_PAGE = 3;
+
+    private final MessageService messageService;
 
     @Autowired
-    public MessageController(MessageRepo messageRepo, WsSender wsSender) {
-        this.messageRepo = messageRepo;
-        this.wsSender = wsSender.getSender(ObjectType.MESSAGE, Views.IdName.class);
+    public MessageController(MessageService messageService) {
+        this.messageService = messageService;
     }
 
     @GetMapping
-    @JsonView(Views.IdName.class)
-    public List<Message> list() {
-        return messageRepo.findAll();
+    @JsonView(Views.FullMessage.class)
+    public MessagePageDto list(
+            @PageableDefault(size = MESSAGE_PER_PAGE, sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable
+    ) {
+        return messageService.findAll(pageable);
     }
 
     @GetMapping("{id}")
@@ -42,37 +43,26 @@ public class MessageController {
     }
 
     @PostMapping
+    @JsonView(Views.FullMessage.class)
     public Message create(
             @RequestBody Message message,
             @AuthenticationPrincipal User user
-    ) {
-        message.setCreationDate(LocalDateTime.now());
-        message.setAuthor(user);
-        Message updatedMessage = messageRepo.save(message);
-
-        wsSender.accept(EventType.CREATE, updatedMessage);
-
-        return updatedMessage;
+    ) throws IOException {
+       return messageService.create(message, user);
     }
 
     @PutMapping("{id}")
+    @JsonView(Views.FullMessage.class)
     public Message update(
             @PathVariable("id") Message messageFromDb,
             @RequestBody Message message
-    ) {
-        BeanUtils.copyProperties(message, messageFromDb, "id");
-
-        Message updatedMessage = messageRepo.save(messageFromDb);
-
-        wsSender.accept(EventType.UPDATE, updatedMessage);
-
-        return updatedMessage;
+    ) throws IOException {
+       return messageService.update(messageFromDb, message);
     }
 
     @DeleteMapping("{id}")
     public void delete(@PathVariable("id") Message message) {
-        messageRepo.delete(message);
-        wsSender.accept(EventType.REMOVE, message);
+        messageService.delete(message);
     }
 
 }
